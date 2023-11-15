@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="column-container">
+    <div class="container m-auto mt-0">
+        <div><h3>Hello, {{session.get('username')}}</h3></div>
+        <div class="row mb-4">
+            <div class="col-5-lg pl-2">
+                <img src="#" alt="" style = "width:100px; height:100px;" class="p-2">
+                <p>Enthusiastic language learner looking to improve</p>
+            </div>
+            <div class="col-7-lg display-f p-2">
+                <div style="border: 1px solid;" class="col-12-lg p-2">
+                    Lessons completed
+                </div>
+                <div style="border: 1px solid;" class="col-12-lg p-2">Cards learned</div>
+            </div>
+        </div>
+        <!--_________________________________________________________________-->
+        <div class="row mb-4">
+            <div class="col-5-lg mb-2 pl-2">
+                <div><h3>My Lessons</h3></div>
+                <p class="">Checkout the courses you are currently enrolled</p>
+            </div>
+            <div class="col-7-lg display-f m-auto justify-flex-end mb-2 pr-2">
+                <div class="gap-2 display-f">
+                    <button class="btn-outlined-blue">Create lesson</button>
+                    <button class="btn-green">My lessons</button>
+                </div>
+            </div>
+            <div class="col-12-lg col-12-md col-12-sm col-12-xs display-f justify-center">
+                <div class="row mt-3">
+            {% for lesson in lessons %}
+                    <div class=" col-4-lg col-5-md col-12-sm col-12-xs flex-auto">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">{{ lesson.lesson_title }}</div>
+                                <div class="card-info">{{ lesson.lesson_description }}</div>  
+                                <div class="card-footer">
+                                        <a class="card-link" href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.id, lesson_title=lesson.lesson_title) }}">Continue</a>
+                                </div>
+                            </div>
+                        </div><!--card end-->
+                    </div>
+            {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!--_________________________________________________________________-->
+        <div class="row p-2">
+            <div class="col-5-lg m-auto">
+                <h3>Learn with flashcards</h3>
+                <p class="pb-1">Improve your language skills with our interactive flashcards</p>
+                <div class="">
+                    <button class="btn-blue mt-1">Start learning</button>
+                </div>
+            </div>
+            <div class="col-7-lg mb-2 pl-2">
+                <div style="border: 1px solid;" class="p-2">
+                    <h6>Vocabulary</h6>
+                    <p>Learn new words and improve vocabulary</p>
+                </div>
+                <div style="border: 1px solid;" class="p-2">
+                    <h6>Grammar</h6>
+                    <p>Master the rules and structures of the language</p>
+                </div>
+            </div>
+        </div>
+        <!--_________________________________________________________________-->
+        <div class="row p-2">
+            <div class="m-auto pl-2 text-center">
+                <h3>Popular Lessons</h3>
+                <p>Explore the wide range of card sets</p>
+                <a href="{{ url_for('user.all_lessons')}}" class="btn-outlined-orange">View all</a>
+            </div>
+            <div class="col-12-lg col-12-md col-12-sm col-12-xs display-f justify-center">
+                <div class="row mt-3">
+            {% for lesson in lessons %}
+                    <div class=" col-4-lg col-5-md col-12-sm col-12-xs flex-auto">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">{{ lesson.lesson_title }}</div>
+                                <div class="card-info">{{ lesson.lesson_description }}</div>  
+                                <div class="card-footer">
+                                        <a class="card-link" href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.id, lesson_title=lesson.lesson_title) }}">Continue</a>
+                                </div>
+                            </div>
+                        </div><!--card end-->
+                    </div>
+            {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

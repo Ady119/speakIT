@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="column-container">
+    <div class="learning-container">
+        <h1 class="">{{lesson.lesson_title}}</h1>
+<div class="row">
+        {% for flashcard in flashcards %}
+        <div class="col-6-lg col-6-md col-12-sm col-12-xs flashcard"  data-lesson-id="{{ flashcard.lesson_id }}">
+            <div class="small-card"><!--card-->
+                <div class="small-card-body"><!--card body start-->
+                    <div class="small-card-info">{{ flashcard.content }}</div>
+                    <div class="small-card-info text-blue">{{ flashcard.translation }}</div>
+                </div><!--card body end--> 
+                <div>
+                    <form action="{{ url_for('admin.edit_flashcard', flashcard_id=flashcard.flashcard_id) }}"method="GET" class="mt-0">
+                        <input type="hidden" name="lesson_id" value="{{ flashcard.lesson_id }}">
+                        <button type="submit" class="small-btn-green">Edit</button>
+                    </form>
+                    <form action="{{ url_for('admin.delete_flashcards', flashcard_id=flashcard.flashcard_id) }}" method="POST" class="mt-0">
+                        <button type="submit" class="small-btn-red" onclick="return confirm('Are you sure you want to delete this flashcard?');">Delete</button>
+                    </form>
+                    
+                </div>
+            </div><!--card end-->
+        </div>  
+        {% endfor %}
+    </div>  
+    </div>
+</div>
+<!-- Include your JavaScript file -->
+<script src="{{ url_for('static', filename='javascript/audio_controls.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to CSS file -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/css/index.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>{% block title %} {{ title }} {% endblock %}</title>
+</head>
+<body>
+    <div class=" display-f">
+        <aside class="sidebar">
+            <div class="logo">
+                Logo
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="{{ 'active' if request.endpoint == 'main.index' else '' }}"><a href="{{ url_for('main.index') }}">Homepage</a></li>
+
+                    {% if session.get('user_authenticated') and  session.get('user_role') == 'ADMIN' %}
+                        <li class="{{ 'active' if request.endpoint == 'admin.dashboard' else '' }}"><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'admin.users' else '' }}"><a href="{{ url_for('admin.users')}}">Users</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'admin.lessons' else '' }}"><a href="{{ url_for('admin.lessons')}}">Lessons</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'admin.add_new_lesson' else '' }}"><a href="{{ url_for('admin.add_new_lesson')}}">Create Lessons</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'admin.flashcards' else '' }}"><a href="{{ url_for('admin.flashcards')}}">Flashcards</a></li>
+
+                    {% elif session.get('user_authenticated') and  session.get('user_role') == 'USER' %}
+                        <li class="{{ 'active' if request.endpoint == 'user.dashboard' else '' }}"><a href="{{ url_for('user.dashboard') }}">Dashboard</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'user.user_content' else '' }}"><a href="{{ url_for('user.user_content')}}">My learning</a></li>
+                        <li class="{{ 'active' if request.endpoint == 'user.all_lessons' else '' }}"><a href="{{ url_for('user.all_lessons')}}">Lessons</a></li>
+                    {%endif%}
+                
+                    <li><a href="/create-flashcards">test</a></li>
+                    <li><a href="/quizzes">Quizzes</a></li>
+                    <li><a href="/profile-settings">Profile Settings</a></li>
+                    <li class="{{ 'active' if request.endpoint == 'auth.logout' else '' }}"><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+        {% block content %}
+        {% endblock %}
+    </div>
+<script src="{{ url_for('static', filename='javascript/flash_msg.js') }}"></script>
+</body>
+</html>

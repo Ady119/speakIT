@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="column-container">
+    <div class="container">
+        <div class="row">
+            <div class="m-auto form-container">
+                <div style="width:100%;">
+                    <h1 class="text-center pb-2">Edit lesson</h1>
+                </div>
+                <form action="{{ url_for('admin.edit_lesson', lesson_id=lesson_id) }}" method="POST">
+                    <div class="container">
+                        {% for category, message in get_flashed_messages(with_categories=True) %}
+                            <div class="flash-message {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                    <label for="id" class="pb-1"><strong>ID:&nbsp;{{lesson_id}}</strong></label>
+                    <label for="lesson_title">Lesson title:</label>
+                        <input type="text" name="lesson_title" id="lesson_title" value="{{ lesson.lesson_title }}">
+                    <label for="lesson_description">Lesson Description:</label>
+                        <input type="text" name="lesson_description" id="lesson_description" value="{{ lesson.lesson_description }}">
+                        <label for="card_count">Flashcards in this lesson</label>
+                    <input type="text" disabled value="{{flashcard_count}}">
+                    <div class="btn-wrapper">
+                        <button type="submit" class="btn-green">Update lesson</button>
+                        <a href="{{ url_for('admin.lesson_flashcards', lesson_id=lesson_id)}}" class="btn-blue">Flashcards</a>
+                        <a href="{{ url_for('admin.add_new_flashcard', lesson_id=lesson_id)}}" class="btn-black">Add card</a>
+                        <a href="{{ url_for('admin.lessons')}}" class="btn-black">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!--row 1 end-->
+{% endblock %}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to CSS file -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/css/index.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>{% block title %} {{ title }} {% endblock %}</title>
+</head>
+
+<body>
+    <header>
+        <div class="navbar-white">
+            <div class="logo">Language Learning App Logo</div>
+            <div>{% if session.get('user_authenticated') %}
+                Hello, {{ session.get('username') }}!
+                {% endif %}
+            </div>
+            <div class="nav-container">
+                <div class="nav-comp1">
+                    <li class="{{ 'active' if request.endpoint == 'main.index' else '' }}"><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <li class="{{ 'active' if request.endpoint == 'lessons.index' else '' }}"><a href="{{ url_for('lessons.index') }}">Learn</a></li>
+                </div>    
+                {% if session.get('user_authenticated') and  session.get('user_role') == 'USER' %}
+                <li class="{{ 'active' if request.endpoint == 'user.dashboard' else '' }}"><a href="{{ url_for('user.dashboard') }}">Dashboard</a></li>
+                {%endif%}
+                {% if session.get('user_authenticated') and  session.get('user_role') == 'ADMIN' %}
+                <li class="{{ 'active' if request.endpoint == 'admin.dashboard' else '' }}"><a href="{{ url_for('admin.dashboard') }}">Admin</a></li>
+                {%endif%}
+                {% if session.get('user_authenticated') %}
+                <div class="nav-comp2">
+                    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                </div>
+            {% else %}
+                <li class="{{ 'active' if request.endpoint == 'auth.login' else '' }}"><a href="{{ url_for('auth.login') }}">Login</a></li>
+                <div class="nav-comp2">
+                    <li class="nav-comp2-li {{ 'active-2' if request.endpoint == 'auth.register' else '' }}"><a href="{{ url_for('auth.register') }}">Get Started</a></li>
+                </div>
+            {% endif %}
+            </div><!--nav-container end-->
+        </div>
+    </header>
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>

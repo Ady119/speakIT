@@ -1,0 +1,151 @@
+{% extends 'main-base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="slider">
+        <div class="slides">
+            <div class="slide">
+                <img src="{{ url_for('static', filename='img/image1.jpg') }}" alt="Image 1">
+            </div>
+            <div class="slide">
+                <img src="{{ url_for('static', filename='img/image2.jpg') }}" alt="Image 2">
+            </div>
+            <div class="slide">
+                <img src="{{ url_for('static', filename='img/image3.jpg') }}" alt="Image 3">
+            </div>
+        </div>
+        <button class="slide-btn prev">&#10094;</button>
+        <button class="slide-btn next">&#10095;</button>
+    </div>
+    <div class="container">
+        <div class="row ">
+            <div class="col-12-lg col-12-md col-12-sm col-12-xs">
+                <div class="col-12-lg pb-2">
+                    <div style="text-align:center;">
+                        <h2>Learning Content</h2>
+                        <p class=" pb-2">Choose from a variety of flashcards</p>
+                        <div>
+                            <button class=" btn-outlined-blue">View More</button>
+                            <button class=" btn-orange">Explore</button>
+                        </div>    
+                    </div>
+                </div>
+                <div class="col-12-lg col-12-md col-12-sm col-12-xs display-f justify-center">
+                    <div class="row">
+                {% for lesson in lessons %}
+                        <div class=" col-4-lg col-5-md col-12-sm col-12-xs flex-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title">{{ lesson.lesson_title }}</div>
+                                    <div> <img class="BrowserCreatesWebDesign" style="width: 100%; height: 200px" src="https://via.placeholder.com/153x120" /></div>
+                                    <div class="card-info">{{ lesson.lesson_description }}</div>  
+                                    <div class="card-footer">
+                                        {% if 'user_authenticated' in session %}
+                                            <a class="card-link" href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.id, lesson_title=lesson.lesson_title) }}">Start now</a>
+                                        {% else %}
+                                            <a class="small-btn-red" href="{{ url_for('auth.login')}}">Start now</a>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </div><!--card end-->
+                        </div>
+                {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="full-w-container">
+        <div class="inner-container">
+            <div class="row">
+                    <div class="col-5-lg col-4-md col-12-sm display-f m-auto">
+                        <div class="home-section-l">
+                            <h2 class="">Why choose us</h2>
+                            <p>Discover the benefits of learning with flashcards</p>
+                            <button class="btn-orange text-white">Learn more</button>
+                        </div>
+                    </div>
+                    <div class="col-7-lg col-8-md col-12-sm">
+                        <div class="home-section-r">
+                            <div><h5>Effective Learning</h5></div>
+                            <div><p>Engage in interactive exercises and quizzes to reinforce your knowledge.</p></div>
+                        </div>
+                        <div class="home-section-r">
+                            <div><h5>Interactive Experience</h5></div>
+                            <div><p>Our flashcard courses are designed to optimize your language learning potential.</p></div>
+                        </div>
+                        <div class="home-section-r">
+                            <div><h5>Flexible Learning</h5></div>
+                            <div><p>Learn at your own pace and schedule with our self-paced courses.</p></div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-center">
+            <div class="col-12-lg col-12-md col-12-sm col-12-xs flex-auto">
+                <div class="col-12-lg display-f justify-center">
+                    <div class="text-center">
+                        <h2 class="card-title">Learning Content</h2>
+                        <p>Choose from a variety of flashcards</p>
+                        <button class="btn-outlined-blue">View More</button>
+                        <button class="btn-orange">Explore</button>
+                    </div>
+                </div>
+                <div class="col-12-lg col-12-md col-12-sm col-12-xs">
+                    <div class="row justify-center">
+                        <div class=" col-3-lg col-5-md col-12-sm  col-12-xs flex-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title">Vocabulary</div>
+                                    <img class="BrowserCreatesWebDesign" style="width: 153px; height: 120px" src="https://via.placeholder.com/153x120" />
+                                    <div class="">
+                                        <p>Spanish Vocabulary</p>
+                                    </div>
+                                </div>
+                            </div><!--card end-->
+                        </div>
+
+                        <div class=" col-3-lg col-5-md col-12-sm  col-12-xs flex-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title">Phrases</div>
+                                    <img class="BrowserCreatesWebDesign" style="width: 153px; height: 120px" src="https://via.placeholder.com/153x120" />
+                                    <div class="">
+                                    <p>Spanish Vocabulary</p>
+                                    </div>
+                                </div>
+                            </div><!--card end-->
+                        </div>
+                        <div class=" col-3-lg col-5-md col-12-sm  col-12-xs  flex-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title">Greetings</div>
+                                    <img class="BrowserCreatesWebDesign" style="width: 153px; height: 120px" src="https://via.placeholder.com/153x120" />
+                                    <div class="">
+                                    <p>Spanish Vocabulary</p>
+                                    </div>
+                                </div>
+                            </div><!--card end-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+        
+    <footer>
+        <div class="full-w-container">
+            <div class="inner container">
+                <div class="row">
+                    <div style="text-align: center;">Copyright @Adrian L</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+<script src="{{ url_for('static', filename='javascript/caroussel.js') }}"></script>
+{% endblock %}

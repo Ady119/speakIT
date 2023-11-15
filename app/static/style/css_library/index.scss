@@ -1,0 +1,26 @@
+// variables & functions
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap');
+@import 'functions';
+@import 'variables';
+
+// base & and layout
+@import 'base';
+@import 'breakpoints';
+@import 'grid';
+
+// colors
+@import 'colors';
+
+// components(buttons, cards, navbar)
+@import 'components/card';
+@import 'components/button';
+@import 'components/navbar';
+@import 'components/aside_navbar'; 
+@import 'components/badge'; 
+@import 'components/video';
+@import 'components/slider';
+
+
+// utilities(margin, padding, opacity)
+@import 'utilities';
+

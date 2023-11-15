@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="column-container">
+    <div class="learning-container">
+        <h1 class="">{{lesson.lesson_title}}</h1>
+        <!-- Progress Bar -->
+        <div class="progress-bar-container-2">
+            <div id="serverProgress" style="display: none;">{{ progress.progress }}</div>
+            <div id="progress" class="progress-2"></div>
+        </div>
+        <!-- Displaying Current Card out of Total -->
+        <p id="cardCounter">Card <span id="currentCard">1</span> of <span id="totalCards">{{ flashcards|length }}</span></p>
+        {% for flashcard in flashcards %}
+        <div class="row"><!--row 1-->
+            <div class="col-12-lg col-12-md col-12-sm col-12-xs ">
+                <div class="card hidden-card" data-card="{{ loop.index }}" style="display: none;">
+                    <div class="card-body pr-1"><!--row 2-->
+                        <div class="row">
+                            <div class="flashcard-side col-12-xs col-12-sm col-6-md col-6-lg">
+                                <h4 class="mb-1 card-title">English</h4>
+                                <div class="card-title">{{ flashcard.content }}</div>
+                            </div>
+                            <div class="flashcard-side2 col-12-xs col-12-sm col-6-md col-6-lg display-f">
+                                <div>
+                                    <h4 class="mb-1">Spanish</h4>
+                                    <div class="card-title">{{ flashcard.translation }}</div>
+                                </div>
+                                <div class="custom-audio-player">
+                                    <audio id="custom-audio-{{ loop.index }}"
+                                        src="{{ url_for('static', filename='audio/' ~ lesson.lesson_title ~ '/' ~ flashcard.audio_file_name) }}"></audio>
+                                    <button id="play-pause-button-{{ loop.index }}"><i class="fa fa-play"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--row 2-->
+                </div><!--card end-->
+            </div>
+        </div><!--row 1 end-->
+        {% endfor %}
+        <div class="row">
+            <div class="navigation col-12-lg col-12-md col-12-sm col-12-xs">
+                <button id="resetProgress">Reset lesson</button>
+                <div class="">
+                    <button><a href="{{ url_for('lessons.index') }}">Back</a></button>
+                    <button id="prevCard">Previous</button>
+                    <button id="nextCard">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Include your JavaScript file -->
+<script src="{{ url_for('static', filename='javascript/audio_controls.js') }}"></script>
+<!-- <script src="{{ url_for('static', filename='javascript/progress_bar.js') }}"></script> -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const cards = document.querySelectorAll('.card');
+        const currentCardElem = document.getElementById('currentCard');
+        const totalCardsElem = document.getElementById('totalCards');
+        const prevButton = document.getElementById('prevCard');
+        const nextButton = document.getElementById('nextCard');
+        const progressBar = document.getElementById('progress');
+        const resetButton = document.getElementById('resetProgress');
+
+        const pathArray = window.location.pathname.split('/');
+        const lessonIdIndex = pathArray.indexOf('lessons') + 1;
+        const lessonId = pathArray[lessonIdIndex];
+        // Retrieve the initial progress from the server and convert it to the card index
+        let savedProgress = parseFloat(document.getElementById('serverProgress').innerText) || 0;
+        let highestProgressReached = Math.floor((savedProgress / 100) * (cards.length - 1));
+
+        // Initialize the currentCardNumber based on savedProgress
+        let currentCardNumber = highestProgressReached;
+
+        // Function to update progress on the server
+        function updateServerProgress(progress) {
+            fetch('/lessons/update_progress/' + lessonId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    lesson_id: lessonId,
+                    progress: Math.floor(progress)
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                savedProgress = progress; // Update the saved progress
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function updateCardDisplay() {
+            cards.forEach(card => card.style.display = 'none');
+            currentCardElem.textContent = currentCardNumber + 1;
+            cards[currentCardNumber].style.display = 'block';
+            const percentage = (currentCardNumber / (cards.length - 1)) * 100;
+            progressBar.style.width = percentage + '%';
+            progressBar.innerText = percentage.toFixed(0) + '%';
+        }
+
+        prevButton.addEventListener('click', function () {
+            if (currentCardNumber > 0) {
+                currentCardNumber--;
+                updateCardDisplay();
+                updateServerProgress((currentCardNumber / (cards.length - 1)) * 100);
+            }
+        });
+
+        nextButton.addEventListener('click', function () {
+            if (currentCardNumber < cards.length - 1) {
+                currentCardNumber++;
+                if (currentCardNumber > highestProgressReached) {
+                    highestProgressReached = currentCardNumber; // Update highest progress reached
+                }
+                updateCardDisplay();
+                updateServerProgress((currentCardNumber / (cards.length - 1)) * 100);
+            }
+        });
+
+        resetButton.addEventListener('click', function () {
+            if (confirm('Are you sure you want to start over with your lesson?')) {
+                highestProgressReached = 0; // Reset the highest progress reached
+                currentCardNumber = 0; // Reset the current card number
+                updateCardDisplay();
+                updateServerProgress(0); // Send the reset progress
+            }
+        });
+
+        window.addEventListener('beforeunload', function (event) {
+            updateServerProgress((currentCardNumber / (cards.length - 1)) * 100);
+        });
+
+        totalCardsElem.textContent = ` of ${cards.length}`;
+        updateCardDisplay(); // Initial display update
+    });
+</script>
+{% endblock %}
