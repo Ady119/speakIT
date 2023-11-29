@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <div class="container">
+        <div style="height: 50px; width:100%"></div>
+            <div class="form-container">
+                <div style="width:100%;">
+                    <h1 class="text-center pb-2">Create new lesson</h1>
+                </div>
+                <form action="{{ url_for('user.create_lesson')}}" method="POST">
+                    <div class="msg">
+                        {% for category, message in get_flashed_messages(with_categories=True) %}
+                            <div class="flash-message {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                    <label for="lesson_title">Lesson title:</label>
+                        <input type="text" name="lesson_title" id="lesson_title" value="{{lesson_title}}">
+                    <label for="lesson_description">Lesson Description:</label>
+                        <input type="text" name="lesson_description" id="lesson_description" value="{{lesson_desc}}">
+                    <div class="btn-wrapper mt-2 m-auto">
+                        {% if form_submitted %}
+                            <a href="{{ url_for('user.flashcards_for_lesson', lesson_id=lesson.id)}}" class="btn-blue">Flashcards</a>
+                        {%endif%}
+                        <button type="submit" class="btn-dark-blue p-0 mt-2 m-0 pt-1 pb-1 text-white">Add lesson</button>
+                        <a href="{{ url_for('user.dashboard')}} " class="btn-outlined-black  p-0 mt-2 m-0 pt-1 pb-1">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+{% endblock %}
