@@ -3,11 +3,84 @@
 {% if session.get('user_role') == 'ADMIN' %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
-<div class="container display-f">
-    <h2>Admin Dashboard</h2>
-
+<div class="column-container">
+    <div style="height: 50px; width:100%"></div>
+    <div class="container">
+        <div class="home-msg">
+            {% if session.get('user_authenticated') and session.get('user_role') == 'ADMIN' %}
+            <span class="home-msg-span"> {{ session.get('username')}}!</span>&nbsp; You are logged in as administrator.
+            {%elif session.get('user_authenticated') and session.get('user_role') == 'USER' %}
+            <div>
+            Hi&nbsp;<span class="home-msg-span">{{ session.get('username')}}!</span>
+            <div>Profile</div>
+        </div>
+            {% endif %}
+        </div>
+        <div class="container">
+            <div class="text-center">
+                <img src="{{ url_for('static', filename='img/user.png') }}" alt="" style = "width:100px; height:100px;">
+                <p>Enthusiastic learning progress and managing system operator</p>
+            </div>
+            <div class="row gap-1">
+                    <div class="col-12-xs col-12-sm col-5-md col-5-lg col-5-xl">
+                        <div style="border: 1px solid;" class="p-2 mb-2 item3">
+                            <div class=""><p>Last lesson added on: <strong>{{last_added_lesson['created_at']}}</strong></p>
+                            </div>
+                            <div class="bg-light-orange text-black pt-2 pb-2 text-center item1  item2">
+                                <div style="display:flex; justify-content: center; flex-wrap: wrap;">
+                                    <div class="admin-stat-1">
+                                        <img class="m-1" style="width: 100px; height: 100px" src="{{ url_for('static', filename='img/' ~   last_added_lesson['image']) }}" />
+                                    </div>
+                                    <div class="m-1 admin-stat">
+                                        <p class="m-0">ID: {{last_added_lesson['id']}}</p>
+                                        <p class="m-0">Title: {{last_added_lesson['lesson_title']}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12-xs col-12-sm col-5-md col-5-lg col-5-xl">
+                        <div style="border: 1px solid;" class="p-2 mb-2  item3">
+                            <div class=""><p>Last flashcard added for lesson ID: <strong>{{last_added_flashcard['lesson_id']}}</strong></p>
+                            </div>
+                            <div class="bg-light-orange text-black pt-2 pb-2 text-center item1  item2">
+                                <div style="display:flex; justify-content: center; flex-wrap: wrap;">
+                                    
+                                    <div class="m-1 admin-stat">
+                                        <p class="m-0">Flashcard ID: {{last_added_flashcard['flashcard_id']}}</p>
+                                        <p class="m-0">Content: {{last_added_flashcard['content']}}</p>
+                                        <p class="m-0">Translation: {{last_added_flashcard['translation']}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                    </div> 
+                </div>
+                <div class="row gap-1">
+                    <div class="col-12-xs col-12-sm col-12-md col-3-lg col-3-xl">
+                        <div style="border: 1px solid;" class="p-2 mb-2">
+                            <div class="pb-2">Lessons in the database</div>
+                            <div class="bg-cherry text-white pt-2 pb-2 text-center item1"> {{lessons_count}}</div>
+                        </div>
+                    </div>
+                    <div class="col-12-xs col-12-sm col-12-md col-3-lg col-3-xl">
+                        <div style="border: 1px solid;" class="p-2 mb-2">
+                            <div class="pb-2">Flashcards in all lessons</div>
+                            <div class=" bg-blue-dark-1 text-white pt-2 pb-2 text-center item1"> {{card_count}}</div>
+                        </div>
+                    </div>
+                    <div class="col-12-xs col-12-sm col-12-md col-3-lg col-3-xl">
+                        <div style="border: 1px solid;" class="mb-2 p-2">
+                            <div class="pb-2">User accounts</div> 
+                            <div class=" bg-green text-white pt-2 pb-2 text-center item1">{{users_count}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
 </div>
-    
     {% endblock %}
     {% endif %}
     {% endif %}
