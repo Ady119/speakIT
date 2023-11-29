@@ -3,74 +3,86 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <div class="slider">
-        <div class="slides">
-            <div class="slide">
-                <img src="{{ url_for('static', filename='img/image1.jpg') }}" alt="Image 1">
-            </div>
-            <div class="slide">
-                <img src="{{ url_for('static', filename='img/image2.jpg') }}" alt="Image 2">
-            </div>
-            <div class="slide">
-                <img src="{{ url_for('static', filename='img/image3.jpg') }}" alt="Image 3">
+    <div class="home-banner-wrapper">
+        <div class="home-banner-info">
+            <h1>Unleash Your Learning Potential.</h1>
+            <h2>Breaking Barriers, Building Futures us</h2>
+            <div class="home-banner-info-btn">
+                <div><a href="{{ url_for('lessons.index') }}" class="btn-outlined-white home-banner-btn ">Find Lessons</a></div>
+                <div><a href="{{ url_for('user.create_lesson') if session.get('user_authenticated') else url_for('auth.login') }}" class="btn-orange home-banner-btn ">Create lessons</a></div>
             </div>
         </div>
-        <button class="slide-btn prev">&#10094;</button>
-        <button class="slide-btn next">&#10095;</button>
+    </div>
+    <div class="slider">
+        <div class="slider-overlay"></div>
+            <div class="slides">
+                <div class="slide">
+                    <img src="{{ url_for('static', filename='img/slide1.jpg') }}" alt="Image 1">
+                </div>
+                <div class="slide">
+                    <img src="{{ url_for('static', filename='img/slide2.jpg') }}" alt="Image 2">
+                </div>
+                <div class="slide">
+                    <img src="{{ url_for('static', filename='img/slide3.jpg') }}" alt="Image 3">
+                </div>
+                <div class="slide">
+                    <img src="{{ url_for('static', filename='img/slide4.jpg') }}" alt="Image 3">
+                </div>
+                <div class="slide">
+                    <img src="{{ url_for('static', filename='img/slide5.jpg') }}" alt="Image 3">
+                </div>
+            </div>
+            <button class="slide-btn prev">&#10094;</button>
+            <button class="slide-btn next">&#10095;</button>
     </div>
     <div class="container">
         <div class="row ">
-            <div class="col-12-lg col-12-md col-12-sm col-12-xs">
-                <div class="col-12-lg pb-2">
+            <div class=" mt-3">
+                <div class="pb-2">
                     <div style="text-align:center;">
-                        <h2>Learning Content</h2>
-                        <p class=" pb-2">Choose from a variety of flashcards</p>
-                        <div>
-                            <button class=" btn-outlined-blue">View More</button>
-                            <button class=" btn-orange">Explore</button>
+                        <h2>Top Picks in Learning</h2>
+                        <p class="pb-2">Explore the Lessons Loved by Learners Like You</p>
+                        <div class="mt-2">
+                            <button class=" btn-blue text-white">See all</button>
                         </div>    
                     </div>
                 </div>
-                <div class="col-12-lg col-12-md col-12-sm col-12-xs display-f justify-center">
-                    <div class="row">
-                {% for lesson in lessons %}
-                        <div class=" col-4-lg col-5-md col-12-sm col-12-xs flex-auto">
+                <div class=" display-f justify-center mt-2">
+                    <div class="row">     
+                    {% for lesson in lessons %}
+                        <div class="col-4-lg col-6-md col-12-sm col-12-xs">
+                            <a class="" href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.id, lesson_title=lesson.lesson_title) }}">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="card-title">{{ lesson.lesson_title }}</div>
-                                    <div> <img class="BrowserCreatesWebDesign" style="width: 100%; height: 200px" src="https://via.placeholder.com/153x120" /></div>
-                                    <div class="card-info">{{ lesson.lesson_description }}</div>  
-                                    <div class="card-footer">
-                                        {% if 'user_authenticated' in session %}
-                                            <a class="card-link" href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.id, lesson_title=lesson.lesson_title) }}">Start now</a>
-                                        {% else %}
-                                            <a class="small-btn-red" href="{{ url_for('auth.login')}}">Start now</a>
-                                        {% endif %}
-
+                                    <div class="display-f justify-center text-center"> 
+                                        <img class="" style="width: 100%; height: 200px" src="{{ url_for('static', filename='img/' ~ lesson.image) }}" />
                                     </div>
-                                </div>
-                            </div><!--card end-->
+                                    <div class="card-title"><p>{{ lesson.lesson_title }}</p></div>
+                                    <div class="card-info"><p>{{ lesson.lesson_description }}</p></div>  
+                                </div><!--card end-->
+                            </div>
+                            </a>     
                         </div>
-                {% endfor %}
+                    {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="full-w-container">
+    <div class="full-w-container bg-cherry">
         <div class="inner-container">
             <div class="row">
-                    <div class="col-5-lg col-4-md col-12-sm display-f m-auto">
-                        <div class="home-section-l">
-                            <h2 class="">Why choose us</h2>
+                    <div class="col-6-lg col-12-md col-12-sm display-f text-center">
+                        <div class="home-section-l m-auto">
+                            <h3 class="text-left">Why choose us</h3>
                             <p>Discover the benefits of learning with flashcards</p>
-                            <button class="btn-orange text-white">Learn more</button>
+                            <button class="btn-white text-black">Learn more</button>
                         </div>
                     </div>
-                    <div class="col-7-lg col-8-md col-12-sm">
+                    <div class="col-6-lg col-12-md col-12-sm">
                         <div class="home-section-r">
-                            <div><h5>Effective Learning</h5></div>
-                            <div><p>Engage in interactive exercises and quizzes to reinforce your knowledge.</p></div>
+                            <div><h5>Masterful Learning Unlocked</h5></div>
+                            <div><p>Our approach integrates the latest in educational research with innovative techniques, ensuring that every lesson is not only informative but truly game-changing.</p></div>
                         </div>
                         <div class="home-section-r">
                             <div><h5>Interactive Experience</h5></div>
@@ -78,7 +90,7 @@
                         </div>
                         <div class="home-section-r">
                             <div><h5>Flexible Learning</h5></div>
-                            <div><p>Learn at your own pace and schedule with our self-paced courses.</p></div>
+                            <div><p>Whether you're a morning bird or a night owl, SpeakIT adapts to your schedule, offering a diverse range of resources and tools accessible anytime, anywhere. </p></div>
                         </div>
                     </div>
                 </div>
@@ -89,61 +101,63 @@
             <div class="col-12-lg col-12-md col-12-sm col-12-xs flex-auto">
                 <div class="col-12-lg display-f justify-center">
                     <div class="text-center">
-                        <h2 class="card-title">Learning Content</h2>
-                        <p>Choose from a variety of flashcards</p>
-                        <button class="btn-outlined-blue">View More</button>
-                        <button class="btn-orange">Explore</button>
+                        <h2 class="card-title">Shape Your Learning Journey</h2>
+                        <p class="pb-2">Customize, Perfect, and Streamline Your Educational Experience</p>
+                        <a class="btn-orange text-white" href="{{ url_for('auth.register')}}">Start your journey</a>
                     </div>
                 </div>
-                <div class="col-12-lg col-12-md col-12-sm col-12-xs">
-                    <div class="row justify-center">
-                        <div class=" col-3-lg col-5-md col-12-sm  col-12-xs flex-auto">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title">Vocabulary</div>
-                                    <img class="BrowserCreatesWebDesign" style="width: 153px; height: 120px" src="https://via.placeholder.com/153x120" />
-                                    <div class="">
-                                        <p>Spanish Vocabulary</p>
-                                    </div>
-                                </div>
-                            </div><!--card end-->
+                <div class="col-12-lg col-12-md col-12-sm col-12-xs mt-3">
+                    <div class="row justify-center text-center">
+                        <div class="col-6-lg col-12-md col-12-sm  col-12-xs bg-light-orange p-2 pt-3">
+                            <img class="graphic-icon" src="{{ url_for('static', filename='img/graphic9.png') }}" />
+                            <div class="inner-title">Start</div>
+                            <p>Dive in and discover language learning that evolves with you, keeping you motivated and on track towards your language goals, all at a pace that feels just right! </p>
                         </div>
-
-                        <div class=" col-3-lg col-5-md col-12-sm  col-12-xs flex-auto">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title">Phrases</div>
-                                    <img class="BrowserCreatesWebDesign" style="width: 153px; height: 120px" src="https://via.placeholder.com/153x120" />
-                                    <div class="">
-                                    <p>Spanish Vocabulary</p>
-                                    </div>
-                                </div>
-                            </div><!--card end-->
+                        <div class="col-6-lg col-12-md col-12-sm  col-12-xs bg-light-green p-2 pt-3">
+                            <img class="graphic-icon" src="{{ url_for('static', filename='img/graphic5.png') }}" />
+                            <div class="inner-title">Edit</div>
+                            <p>Modify content, update resources, or adjust the difficulty level, ensuring your lessons remain up-to-date </p>
                         </div>
-                        <div class=" col-3-lg col-5-md col-12-sm  col-12-xs  flex-auto">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="card-title">Greetings</div>
-                                    <img class="BrowserCreatesWebDesign" style="width: 153px; height: 120px" src="https://via.placeholder.com/153x120" />
-                                    <div class="">
-                                    <p>Spanish Vocabulary</p>
-                                    </div>
-                                </div>
-                            </div><!--card end-->
+                        <div class="col-6-lg col-12-md col-12-sm  col-12-xs bg-light-blue p-2 pt-3">
+                            <img class="graphic-icon" src="{{ url_for('static', filename='img/graphic6.png') }}" />
+                            <div class="inner-title">Create</div>
+                                <p>You can easily craft personalized flashcards to enhance your language learning journey</p>
+                        </div>
+                        <div class="col-6-lg col-12-md col-12-sm  col-12-xs bg-light-red p-2 pt-3">
+                            <img class="graphic-icon" src="{{ url_for('static', filename='img/graphic7.png') }}" />
+                            <div class="inner-title">Delete</div>
+                            <p>If you find a flashcard no longer useful or if it's a duplicate, you can easily remove it to keep your learning focused and organized. </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-        
     <footer>
-        <div class="full-w-container">
-            <div class="inner container">
+        <div class="full-w-container m-0">
+            <div class="container mt-0 mb-0">
                 <div class="row">
-                    <div style="text-align: center;">Copyright @Adrian L</div>
+                    <div class="col-6-lg col-6-md col-12-sm">
+                        <div class="footer-element">
+                            <div class="footer-inner">
+                                <h4>Legal</h4>
+                                <a href="{{ url_for('main.terms') }}">Terms & Conditions</a>
+                                <a href="{{ url_for('main.terms') }}">Privacy Policy</a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6-lg col-6-md col-12-sm">
+                        <div class="footer-element">
+                            <div class="footer-inner">
+                                <h4>Company</h4>
+                                <a href="{{ url_for('main.contact') }}">Contact</a>
+                                <a href="{{ url_for('main.contact') }}">About us</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div style="text-align: center;">Copyright 2023 @Adrian L</div>
             </div>
         </div>
     </footer>
