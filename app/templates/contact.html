@@ -1,0 +1,62 @@
+{% extends 'main-base.html' %}
+
+{% block content %}
+<div style="padding-top: 65px;"></div>
+<div class="page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="m-auto form-container">
+                <div style="width:100%;">
+                    <h1 class="text-center pb-2">Contact us</h1>
+                </div>
+                <div class="msg">
+                    {% for category, message in get_flashed_messages(with_categories=True) %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                <form action="{{ url_for('main.contact')}}" method="POST">
+                    <label for="email">Email address <span style="color: red;">*</span></label>
+                        <input type="email" name='email' id="email" required><br>
+                    <label for="subject">Subject <span style="color: red;">*</span></label>
+                        <input type="text" placeholder="" name='subject' id="subject" required><br>
+                    <label for="subject">Message <span style="color: red;">*</span></label>
+                        <textarea type="text" placeholder="" name='subject' id="subject" required></textarea><br>     
+                        <p><span style="color: red;">*</span> required fields</p>     
+                    <button type="submit" class="btn-orange">Submit request</button> 
+                    <a href=""></a>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>      
+<footer>
+    <div class="full-w-container m-0">
+        <div class="container mt-0 mb-0">
+            <div class="row">
+                <div class="col-6-lg col-6-md col-12-sm">
+                    <div class="footer-element">
+                        <div class="footer-inner">
+                            <h4>Legal</h4>
+                            <a href="{{ url_for('main.terms') }}">Terms & Conditions</a>
+                            <a href="{{ url_for('main.terms') }}">Privacy Policy</a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6-lg col-6-md col-12-sm">
+                    <div class="footer-element">
+                        <div class="footer-inner">
+                            <h4>Company</h4>
+                            <a href="{{ url_for('main.contact') }}">Contact</a>
+                            <a href="{{ url_for('main.contact') }}">About us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center;">Copyright 2023 @Adrian L</div>
+        </div>
+    </div>
+</footer>
+    {% endblock %}
+
