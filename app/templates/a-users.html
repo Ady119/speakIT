@@ -2,55 +2,56 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
 <div class="column-container">
-    <h2>Admin Dashboard</h2>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">
-          {{ message }}
-        </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
-  <div class="row">
-    {% for user in users %}
-        <div class="col-6-lg col-12-md col-12-sm col-12-xs flashcard">
-            <div class="small-card"><!--card-->
-                <div class="small-card-body"><!--card body start-->
-                    <div class="column">
-                        <div>
-                            <div class="span-column">User ID</div>
-                            <div class="small-card-info">{{ user["id"] }}</div>
-                        </div>
-                        <div>
-                            <div class="span-column">Role</div>
-                            <div class="small-card-info text-blue">{{ user["role"] }}</div>
-                        </div>
-                    </div>
-                    <div class="column">
-                        <div>
-                            <div class="span-column">Username</div>
-                            <div class="small-card-info text-blue">{{ user["username"] }}</div>
-                        </div>
-                        <div>
-                            <div class="span-column">Email</div>
-                            <div class="small-card-info text-blue">{{ user["email"] }}</div>
-                        </div>
-                    </div>
-                        <div>
-                        <form action="{{ url_for('admin.edit_user', user_id=user.id) }}" method="GET" class="m-0">
-                            <button type="submit" class="small-btn-green">Edit</button>
-                        </form>
-                        <form action="{{ url_for('admin.delete_record', user_id=user.id) }}" method="POST" class="m-0">
-                            <button type="submit" class="small-btn-red" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
-                        </form>
-                        
-                    </div>
-                </div><!--card body end--> 
-                
-            </div><!--card end-->
-        </div>     
+<div style="height: 50px; width:100%"></div>
+<div class="msg">
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+        <div class="flash-message {{ category }}">{{ message }}</div>
     {% endfor %}
 </div>
-           
+    <div class="container">
+        <h3>User accounts</h3>
+        <div class="row">
+            {% for user in users %}
+                <div class="col-6-lg col-12-md col-12-sm col-12-xs flashcard">
+                    <div class="small-card"><!--card-->
+                        <div class="small-card-body"><!--card body start-->
+                            <div class="column">
+                                <div>
+                                    <div class="span-column">User ID</div>
+                                    <div class="small-card-info">{{ user["id"] }}</div>
+                                </div>
+                                <div>
+                                    <div class="span-column">Role</div>
+                                    <div class="small-card-info text-blue">{{ user["role"] }}</div>
+                                </div>
+                                <div>
+                                    <div class="span-column">Member since</div>
+                                    <div class="small-card-info text-blue">{{ user["member_since"] }}</div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div>
+                                    <div class="span-column">Username</div>
+                                    <div class="small-card-info text-blue">{{ user["username"] }}</div>
+                                </div>
+                                <div>
+                                    <div class="span-column">Email</div>
+                                    <div class="small-card-info text-blue">{{ user["email"] }}</div>
+                                </div>
+                            </div>
+                                <div>
+                                <form action="{{ url_for('admin.edit_user', user_id=user.id) }}" method="GET" class="m-0">
+                                    <button type="submit" class="small-btn-green">Edit</button>
+                                </form>
+                                <form action="{{ url_for('admin.delete_record', user_id=user.id) }}" method="POST" class="m-0">
+                                    <button type="submit" class="small-btn-red" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                                </form>
+                                
+                            </div>
+                        </div><!--card body end--> 
+                        
+                    </div><!--card end-->
+                </div>     
+            {% endfor %}
+    </div>     
 {% endblock %}
