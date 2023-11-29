@@ -1,40 +1,98 @@
-{% if session.get('user_authenticated') and  session.get('user_role') == 'USER' %}
-{% extends 'base.html' %}
+{% if session.get('user_authenticated')%}
+    {% extends 'base.html' %}
 {%else%}
-{% extends 'main-base.html' %}
+    {% extends 'main-base.html' %}
 {%endif%}
-{% block content %}
-<div style="padding-top: 65px;"></div>
-{% if session.get('user_authenticated') and  session.get('user_role') == 'USER' %}
 {% block title %}{{ title }}{% endblock %}
+{% block content %}
 <div class="column-container">
-    <div><h2>Hello, {{session.get('username')}}</h2></div>
-    {%endif%}
-    <h1 class="">Lessons</h1>
-    <div class=" col-12-lg">
+    <div style="height: 50px; width:100%"></div>
+    <div class=" full-w-container p-0 bg-transparent m-0">
+            <div class=" inner-container">
+                <div><img src="{{ url_for('static', filename='img/edu.jpg') }}" height="350px" alt="Image 1"></div>
+            </div>
+    </div>
+    {% for category, message in get_flashed_messages(with_categories=True) %}
+        <div class="flash-message {{ category }}">{{ message }}</div>
+    {% endfor %}
+    <div class="container">
+        <h1 class="">Lessons</h1>
         <div class="row">
-            {% for lesson in lessons %}
-                <a href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.id, lesson_title=lesson.lesson_title) }}" class="text-black">
-                <div class="col-4-lg col-6-md col-12-sm col-12-xs">
-                    <div class="card"><!--card-->
-                        <div class="card-body"><!--card body start-->
-                            <div class="card-title">{{ lesson.lesson_title }}</div>
-                            <div class="card-info">{{ lesson.lesson_description }}</div>    
-                        </div><!--card body end-->
-                        <div>
-                            {% if session.get('user_authenticated') and  session.get('user_role') == 'USER' %}
-                            <a class="card-button" href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.id, lesson_title=lesson.lesson_title) }}">Continue</a>
-                            {%else%}
-                            <a class="card-button" href="{{ url_for('auth.login')}}">Start lesson</a>
+            {% for lesson in lessons%}
+                {%if (lesson.added_by == 'Admin') or (lesson.added_by == 'USER' and lesson.user_id == user_id)  %}
+                    <a href="{{ url_for('lessons.lesson_flashcards', lesson_id=lesson.id)}}" class="text-black">
+                    <div class="col-4-lg col-6-md col-12-sm col-12-xs">
+                        <div class="card"><!--card-->
+                            {%if lesson.added_by == 'USER' and lesson.user_id == user_id %}
+                                <p class="badge-green">Created</p>
                             {%endif%}
-                        </div>
-                    </div><!--card end-->
-                </div>
-            </a>
+                            <div class="card-body"><!--card body start-->
+                                {% if user_id and lesson.progress == 100 %}
+                                    <p class="badge-purple">Completed </p>
+                                {% endif %}
+                                <img class="" style="width: 100%; height: 200px" src="{{ url_for('static', filename='img/' ~ lesson.image) }}" />
+                                <div class="card-title">{{ lesson.lesson_title }}</div>
+                                <div class="card-info">{{ lesson.lesson_description }}</div>   
+                            </div><!--card body end-->
+                            <div class="btn-wrap pl-2 pr-2 pb-2">
+                                {% if (session.get('user_authenticated') and  (session.get('user_role') == 'USER')) or session.get('user_role') == 'ADMIN' %}
+                                    {% if lesson.progress == 100 %}    
+                                        <a class="a-button" href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.id, lesson_title=lesson.lesson_title) }}">Review</a>
+                                    {% else %}
+                                        <a class="a-button" href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.id, lesson_title=lesson.lesson_title) }}">Go to lesson</a>
+                                    {%endif%}
+                                {%else%}
+                                    <a href="{{ url_for('lessons.lesson_flashcards', lesson_id=lesson.id)}}" class="small-btn-outlined-orange">Flashcards</a>
+                                    <a class="a-button" href="{{ url_for('auth.login')}}">Start lesson</a>
+                                {%endif%}
+                                {% if session.get('user_authenticated') and  session.get('user_role') == 'ADMIN' %}
+                                    <a href="{{ url_for('admin.lesson_flashcards', lesson_id=lesson.id)}}" class="small-btn-outlined-orange">Flashcards</a>
+                                {%elif session.get('user_authenticated') and  session.get('user_role') == 'USER' %}
+                                    <a href="{{ url_for('lessons.lesson_flashcards', lesson_id=lesson.id, lesson_title=lesson.lesson_title)}}" class="small-btn-outlined-orange">Flashcards</a>
+                                {%endif%}
+                                {% if lesson.added_by == 'USER' and user_authenticated %}
+                                    <form action="{{ url_for('user.edit_lesson', lesson_id=lesson.id) }}" class="p-0" method="GET">
+                                        <button type="submit" class="small-btn-green">Edit</button>
+                                    </form>
+                                {%endif%}
+                            </div>
+                        </div><!--card end-->
+                    </div>
+                    </a>
+                {%endif%}
             {% endfor %}
         </div>
     </div>
-</div>
+    <footer>
+        <div class="full-w-container m-0">
+            <div class="container-margin-left">
+                <div class="container mt-0 mb-0">
+                    <div class="row">
+                        <div class="col-6-lg col-6-md col-12-sm">
+                            <div class="footer-element">
+                                <div class="footer-inner">
+                                    <h4>Legal</h4>
+                                    <a href="{{ url_for('main.terms') }}">Terms & Conditions</a>
+                                    <a href="{{ url_for('main.terms') }}">Privacy Policy</a>
 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6-lg col-6-md col-12-sm">
+                            <div class="footer-element">
+                                <div class="footer-inner">
+                                    <h4>Company</h4>
+                                    <a href="{{ url_for('main.contact') }}">Contact</a>
+                                    <a href="{{ url_for('main.contact') }}">About us</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">Copyright 2023 @Adrian L</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
 
 {% endblock %}
