@@ -12,15 +12,14 @@ def index():
     
     return render_template('index.html', title=title, lessons=lessons)
 
-# @main.route('/dashboard')
-# def dashboard():
-#     user_name = "Adrian L"  # Fetch from database/session
-#     user_bio = "Enthusiastic language learner looking to improve"  # Fetch from database/session
-#     user_courses = get_user_courses()  # You'll define this function to fetch course data
-#     popular_flashcard_sets = get_popular_flashcard_sets()  # You'll define this function
+@main.route('/speakIT/terms&conditions')
+def terms():
+    title = "SpeakIT | Terms & Conditions"    
+    
+    return render_template('privacy-policy.html', title=title)
 
-#     return render_template('user_dashboard.html', 
-#                             user_name=user_name, 
-#                             user_bio=user_bio, 
-#                             user_courses=user_courses,
-#                             popular_flashcard_sets=popular_flashcard_sets)
+@main.route('/speakIT/contactUs')
+def contact():
+    title = "SpeakIT | Contact Us"    
+    
+    return render_template('contact.html', title=title)
