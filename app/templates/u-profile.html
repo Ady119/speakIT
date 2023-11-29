@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div style="height: 50px; width:100%"></div>
+        <div class="row">
+            <div class="m-auto mb-4">
+                <div style="width:100%;">
+                    <h1 class="text-center pb-2">Profile Settings</h1>
+                </div>
+                <div class="msg">
+                    {% for category, message in get_flashed_messages(with_categories=True) %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                <div>
+                    <img src="{{ url_for('static', filename='img/user.png') }}" alt="" style = "width:100px; height:100px;">
+                    {%if session.get('user_authenticated') and session.get('user_role') =='ADMIN' %}
+                    <p class="text-blue" style="font-weight: 600;">Administrator</p>
+                    {%endif%}
+                </div>
+                <form action="{{ url_for('auth.update_profile')}}" id="profile_update" method="POST">
+                    <label for="username" class="pb-1">Your username</label>
+                        <p>{{username}}</p><br>
+                    <label for="member_since" class="pb-1">Member since</label>
+                    <p>{{users['member_since']}}</p>
+                    <br>
+                    <label for="email"  class="pb-1">Email address</label>
+                        <p>{{email}}</p>
+                    <label for="new_username">New username</label>
+                        <input type="text" placeholder="type your new username..." name='new_username' value="" id="username">
+                        <label for="new_email">New email</label>
+                        <input type="email" placeholder="type your new email address..." name='new_email' value="" id="new_email">           
+                    <label for="old_password">Password</label>
+                        <input type="text" placeholder="type your old password..." name='old_password' value="" id="old_password"><br>
+                    <label for="new_password">New password</label>
+                        <input type="text" placeholder="type your new password..." name='new_password' value="" id="password">   
+                    <button type="submit" id="submit_button" style="width: 100%;" disabled class="disabled-btn p-0 mt-2 m-0  pt-1 pb-1 text-white">Change</button> 
+                </form>
+            </div>
+        </div>
+    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('profile_update');
+        const submit_button = document.getElementById('submit_button');
+
+        form.addEventListener('change', function() {
+            submit_button.disabled = false;
+            submit_button.classList.add('btn-orange');
+        });
+    });
+</script>
+
+    {% endblock %}
+
+    {% for flashcard in flashcards %}
+    <div class="col-4-lg col-6-md col-12-sm col-12-xs flashcard"  data-lesson-id="{{ flashcard.lesson_id }}">
+        <div class="small-card"><!--card-->
+            <div class="small-card-body"><!--card body start-->
+                <div class="small-card-info">{{ flashcard.content }}</div>
+                <div class="small-card-info text-blue">{{ flashcard.translation }}</div>
+            </div><!--card body end--> 
+            <div>
+                <form action="{{ url_for('admin.edit_flashcard', flashcard_id=flashcard.flashcard_id) }}"method="GET" class="mt-0">
+                    <input type="hidden" name="lesson_id" value="{{ flashcard.lesson_id }}">
+                    <button type="submit" class="small-btn-green">Edit</button>
+                </form>
+                <form action="{{ url_for('admin.delete_flashcards', flashcard_id=flashcard.flashcard_id) }}" method="POST" class="mt-0">
+                    <button type="submit" class="small-btn-red" onclick="return confirm('Are you sure you want to delete this flashcard?');">Delete</button>
+                </form>
+                
+            </div>
+        </div><!--card end-->
+    </div>     
+{% endfor %}
