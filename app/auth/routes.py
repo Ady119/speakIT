@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from ..utils.database import get_db
-from ..utils.functions import get_recent_lessons, get_user_content, get_all_lessons, check_if_user_exists, login_required, role_required
+from ..utils.functions import  check_if_user_exists, login_required, role_required, get_user_by_id, get_user_by_username, update_email, update_password, update_username, get_user_info
 from datetime import datetime as dt
 
 auth = Blueprint('auth', __name__)
@@ -20,17 +20,18 @@ def register():
             return redirect(url_for('auth.register'))
             
         hashed_password = generate_password_hash(password)
+        current_time = dt.now().strftime('%Y-%m-%d %H:%M:%S')
 
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', 
-        (username, email, hashed_password))
+        cursor.execute('INSERT INTO users (username, email, password, member_since) VALUES (?, ?, ?, ?)', 
+        (username, email, hashed_password, current_time))
         conn.commit()
         
-        flash('Registered and logged in successfully!', 'success')
+        flash('Congratulations, registration complete!', 'success')
         return redirect(url_for('auth.login'))
     else:
-        return render_template('register.html')
+        return render_template('register.html', title=title)
     
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -49,6 +50,8 @@ def login():
             session['user_authenticated'] = True
             session['user_role'] = result['role']
             session['username'] = result['username']
+            session['email'] = result['email']
+
             session['user_id'] = result['id']
             print (session['user_id'])
             
@@ -63,6 +66,7 @@ def login():
     return render_template('login.html', title = title)
         
 @auth.route('/logout')
+@login_required
 def logout():
     session.pop('user_id', None)
     session.pop('user_role', None)
@@ -71,5 +75,47 @@ def logout():
     flash('Logged out successfully!', 'success')
     return redirect(url_for('auth.login'))
 
+@auth.route('/profile/settings', methods = ['GET'])
+@login_required
+def profile():
+    user_id = session.get('user_id')
+    title = "Profile Settings | SpeakIT"
+    users = get_user_info(user_id)
+    return render_template('u-profile.html', username=session.get('username'), email=session.get('email'), title=title, users= users)
+
+@auth.route('/update', methods=['POST'])
+@login_required
+def update_profile():
+    title = "Profile settings | SpeakIT"
+    user_id = session.get('user_id')
+
+    old_password = request.form.get('old_password')
+    new_password = request.form.get('new_password')
+    new_username = request.form.get('new_username', '').strip()
+    new_email = request.form.get('new_email', '').strip()
+
+    if new_password and old_password:
+        user = get_user_by_id(user_id)
+        if check_password_hash(user['password'], old_password):
+            new_password_hash = generate_password_hash(new_password)
+            update_password(user_id, new_password_hash)
+            flash('Password successfully updated.')
+        else:
+            flash('Old password is incorrect.')
+
+    if new_username:
+        if check_if_user_exists(new_username):
+            flash('Username already exists!', 'error')
+        else:
+            update_username(user_id, new_username)
+            session['username'] = new_username
+            flash('Username updated!', 'success')
+
+    if new_email:
+        update_email(user_id, new_email)
+        session['email'] = new_email
+        flash('Email updated!', 'success')
+
+    return redirect(url_for('auth.profile', title=title))
 
 
