@@ -20,10 +20,11 @@
                         <input type="text" name="lesson_title" id="lesson_title" value="{{lesson_title}}">
                     <label for="lesson_description">Lesson Description:</label>
                         <input type="text" name="lesson_description" id="lesson_description" value="{{lesson_desc}}">
-                    <div class="btn-wrapper">
-                        <button type="submit" class="btn-blue">Add lesson</button>
-                        <a href="{{ url_for('admin.lessons')}}" class="btn-black">Cancel</a>
-                    </div>
+                        {% if form_submitted %}
+                            <a href="{{ url_for('admin.lesson_flashcards', lesson_id=lesson_id)}}" class="btn-blue">Flashcards</a>
+                        {%endif%}
+                        <button type="submit" class="btn-blue text-white p-0 m-0 mt-2 pt-1 pb-1">Add lesson</button>
+                        <a href="{{ url_for('admin.lessons')}}" class="btn-outlined-black p-0 m-0 mt-2 pt-1 pb-1">Cancel</a>
                 </form>
             </div>
         </div>
