@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="column-container">
+    <div style="height: 50px; width:100%"></div>
+
+    <div class="container">
+            <h1 style="font-size: 2rem;" class="text-center">Lessons you already started</h1>
+            <div class="row">
+                {% for lesson in user_content %}
+                    {% if lesson.progress > 0 %}
+                        <a href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.lesson_id, lesson_title=lesson.lesson_title) }}" class="text-black">
+                            <div class="col-6-lg col-10-md col-12-sm col-12-xs m-auto">
+                                <div class="card"><!--card-->
+                                    <div class="card-body"><!--card body start-->
+                                        <div class="card-title">{{ lesson.lesson_title }}</div>
+                                        <div class="card-info">{{ lesson.lesson_description }}</div>
+                                        <div class="progress-bar-container">
+                                            <div class="progress-bar-container-2" data-progress="{{ lesson.progress }}">
+                                                <div class="progress-2 progress-text">{{lesson.progress}}%</div>
+                                            </div>
+                                        </div>
+                                    </div><!--card body end-->
+                                    <div>
+                                        {% if session.get('user_authenticated') and session.get('user_role') == 'USER' %}
+                                        <a class="small-btn-blue" href="{{ url_for('lessons.flashcards_for_lessons', lesson_id=lesson.lesson_id, lesson_title=lesson.lesson_title) }}">Continue</a>
+                                        {% endif %}
+                                    </div>
+                                </div><!--card end-->
+                            </div>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+</div>
+<script src="{{ url_for('static', filename='javascript/progressB-my-learning.js') }}"></script>
+{% endblock %}
