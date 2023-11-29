@@ -4,31 +4,36 @@
 
 {% block content %}
 <div class="column-container">
+    <div style="height: 50px; width:100%"></div>
+
     <div class="container">
         <div class="row">
             <div class="m-auto form-container">
                 <div style="width:100%;">
                     <h1 class="text-center pb-2">Edit lesson</h1>
                 </div>
-                <form action="{{ url_for('admin.edit_lesson', lesson_id=lesson_id) }}" method="POST">
+                <form action="{{ url_for('admin.edit_lesson', lesson_id=lesson_id) }}" method="POST" class="mb-3">
                     <div class="container">
                         {% for category, message in get_flashed_messages(with_categories=True) %}
                             <div class="flash-message {{ category }}">{{ message }}</div>
                         {% endfor %}
                     </div>
+                    <input type="hidden" name="current_lesson_title" value="{{ lesson.lesson_title }}">
                     <label for="id" class="pb-1"><strong>ID:&nbsp;{{lesson_id}}</strong></label>
                     <label for="lesson_title">Lesson title:</label>
                         <input type="text" name="lesson_title" id="lesson_title" value="{{ lesson.lesson_title }}">
                     <label for="lesson_description">Lesson Description:</label>
-                        <input type="text" name="lesson_description" id="lesson_description" value="{{ lesson.lesson_description }}">
+                        <textarea name="lesson_description" id="lesson_description">{{ lesson.lesson_description }}</textarea>
                         <label for="card_count">Flashcards in this lesson</label>
                     <input type="text" disabled value="{{flashcard_count}}">
-                    <div class="btn-wrapper">
-                        <button type="submit" class="btn-green">Update lesson</button>
-                        <a href="{{ url_for('admin.lesson_flashcards', lesson_id=lesson_id)}}" class="btn-blue">Flashcards</a>
-                        <a href="{{ url_for('admin.add_new_flashcard', lesson_id=lesson_id)}}" class="btn-black">Add card</a>
-                        <a href="{{ url_for('admin.lessons')}}" class="btn-black">Cancel</a>
-                    </div>
+                        <button type="submit" class="btn-green text-white  p-0 mt-2 m-0 pt-1 pb-1">Update lesson</button>
+                        {%if flashcard_count %}
+                            <a href="{{ url_for('admin.lesson_flashcards', lesson_id=lesson_id)}}" class="btn-orange text-white  p-0 mt-2 m-0 pt-1 pb-1">Flashcards</a>
+                            <a href="{{ url_for('admin.add_new_flashcard', lesson_id=lesson_id)}}" class="btn-dark-blue text-white  p-0 mt-2 m-0 pt-1 pb-1">Add card</a>
+                        {%else%}
+                            <a href="{{ url_for('admin.add_new_flashcard', lesson_id=lesson_id)}}" class="btn-dark-blue text-white  p-0 mt-2 m-0 pt-1 pb-1">Add card</a>
+                        {%endif%}
+                        <a href="{{ url_for('admin.lessons')}}" class="btn-outlined-black  p-0 mt-2 m-0 pt-1 pb-1">Cancel</a>
                 </form>
             </div>
         </div>
