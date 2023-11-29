@@ -4,6 +4,8 @@
 
 {% block content %}
 <div class="column-container">
+    <div style="height: 50px; width:100%"></div>
+
     <div class="container">
         <div class="row">
             <div class="m-auto form-container">
@@ -27,8 +29,8 @@
                     <label for="flashcard_audio" class="pt-2">Upload a new audio file:</label>
                         <input type="file" name="file">
                     <div class="btn-wrapper">
-                        <button type="submit" class="btn-blue">Add card</button>
-                        <a href="{{ url_for('admin.lessons')}}" class="btn-black">Cancel</a>
+                        <button type="submit" class="btn-blue text-white">Add card</button>
+                        <a href="{{ url_for('admin.lesson_flashcards', lesson_id=lesson_id)}}" class="btn-outlined-black">Cancel</a>
                     </div>
                 </form>
             </div>
