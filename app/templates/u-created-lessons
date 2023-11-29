@@ -1,0 +1,56 @@
+{% if session.get('user_authenticated') and  session.get('user_role') == 'USER' %}
+{% extends 'base.html' %}
+{%else%}
+{% extends 'main-base.html' %}
+{%endif%}
+{% block content %}
+{% if session.get('user_authenticated') and  session.get('user_role') == 'USER' %}
+<div class="column-container">
+    <div style="height: 50px; width:100%"></div>
+    <div class="container">
+        {%endif%}
+        <h3 class="">Lessons created by you</h3>
+        <div class="msg">
+            {% for category, message in get_flashed_messages(with_categories=True) %}
+                <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="add-btn-user">
+                <div class="display-f user-top-right-header">
+                    <a href="{{ url_for('user.create_lesson')}}" class="crud-btn-blue">
+                        <span class="crud-btn__text">New lesson </span>
+                            <span class="crud-btn_icon">
+                                <i class="fas fa-plus text-white"></i>
+                        </span>
+                    </a>    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for lesson in lessons %}
+                {% if session.get('user_id') == lesson.user_id and lesson.added_by == 'USER' %}
+                    <div class="col-6-lg col-10-md col-12-sm col-12-xs m-auto">
+                        <div class="card p-2"><!--card-->
+                            <div class="card-body"><!--card body start-->
+                                <div class="card-title">{{ lesson.lesson_title }}</div>
+                                <div class="card-info">Description: {{ lesson.lesson_description }}</div>    
+                                <div class="card-info">Flashcards: {{lesson.flashcard_count}}</div>
+                            </div><!--card body end-->
+                            <div style="display: flex;">
+                                <div><a class="small-btn-blue" href="{{ url_for('lessons.lesson_flashcards', lesson_id=lesson.id)}}">Flashcards</a></div>
+                                <div>
+                                    <form action="{{ url_for('user.edit_lesson', lesson_id=lesson.id) }}" class="mt-0" method="GET">
+                                        <button type="submit" class="small-btn-green">Edit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div><!--card end-->
+                    </div>
+                {%endif%}
+            {% endfor %}   
+        </div>
+    </div>
+</div>
+
+{% endblock %}
