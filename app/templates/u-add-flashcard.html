@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="column-container">
+    <div class="container">
+        <div class="row">
+            <div class="m-auto form-container">
+                <div style="width:100%;">
+                    <h1 class="text-center pb-2">Add new card</h1>
+                    <div class="pl-1"><p><strong>Lesson:&nbsp;{{lesson_title}}</p></div>
+                    <div class="pl-1"><p><strong>This lesson contains:&nbsp;</strong>{{flashcard_count}} learning cards</p></div>
+                </div>
+                <form action="{{ url_for('user.add_new_flashcard', lesson_id=lesson_id)}}" method="POST" enctype="multipart/form-data">
+                    <div class="msg">
+                        {% for category, message in get_flashed_messages(with_categories=True) %}
+                            <div class="flash-message {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="lesson_id" id="content" value="{{lesson_id}}">
+
+                    <label for="content">Flashcard Content:</label>
+                        <input type="text" name="content" id="content" value="{{content}}">
+                    <label for="translation">Translation:</label>
+                        <input type="text" name="translation" id="translation" value="{{translation}}">
+                        <label for="example">Example:</label>
+                        <input type="text" name="example" id="example" value="{{example_sentence}}">
+                    <label for="flashcard_audio" class="pt-2">Upload a new audio file:</label>
+                        <input type="file" name="file">
+                    <div class="btn-wrapper">
+                        <button type="submit" class="btn-dark-blue text-white">Add card</button>
+                        <a href="{{ url_for('lessons.lesson_flashcards', lesson_id=lesson_id)}}" class="btn-outlined-black">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
