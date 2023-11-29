@@ -2,6 +2,8 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
 <div class="column-container">
+    <div style="height: 50px; width:100%"></div>
+
         <div class="container">
             <div class="row">
                 <div class="m-auto form-container">
@@ -14,10 +16,8 @@
                             <input type="text" name="username" id="username" value="{{ user.username }}">   
                         <label for="email">Email Address:</label>
                             <input type="email" name="email" id="email" value="{{ user.email }}">
-                        <div class="btn-wrapper">
-                            <button type="submit" class="btn-green">Update User</button>
-                            <a href="{{ url_for('admin.users')}}" class="btn-black">Cancel</a>
-                        </div>
+                            <button type="submit" class="btn-green text-white p-0 m-0 mt-2 pt-1 pb-1">Update User</button>
+                            <a href="{{ url_for('admin.users')}}" class="btn-outlined-black p-0 mt-2 m-0 pt-1 pb-1 ">Cancel</a>
                     </form>
                 </div>
             </div>
